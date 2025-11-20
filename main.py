@@ -1,7 +1,13 @@
 # bot/main.py
 import logging
 from pyrogram import Client, filters
-from config import API_ID, API_HASH, BOT_TOKEN
+# main.py (top)
+import os
+from configs import API_ID, API_HASH, BOT_TOKEN   # absolute import, not relative
+
+# optional safety: if configs.py currently expects hard-coded values,
+# prefer environment variables (see configs.py fix below)
+
 
 from .handlers import (
     start, merge, trim, compress, rename, screenshot,
