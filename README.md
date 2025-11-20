@@ -30,7 +30,7 @@
 - [X] Log Channel Added
 
 ### Deploy on Heruko
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Doctorstra/Video-Editor-Bot-V22)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/NaheedoVS/Lasthope)
 
 
 ### Deploy on Railway
