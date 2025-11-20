@@ -1,16 +1,45 @@
 # configs.py
+# Configuration loaded from environment variables.
+# Keep sensitive values out of source control (use Heroku config vars or .env locally).
+
 import os
+from typing import Optional
 
+API_ID: Optional[int] = None
+API_HASH: Optional[str] = None
+BOT_TOKEN: Optional[str] = None
+LOG_CHANNEL: Optional[int] = None  # optional: channel id for logs
+MONGO_URL: Optional[str] = None    # optional: mongodb if used
 
-BOT_TOKEN = os.environ.get("BOT_TOKEN")
-API_ID = int(os.environ.get("API_ID")) if os.environ.get("API_ID") else None
-API_HASH = os.environ.get("API_HASH")
+def _int_env(name: str) -> Optional[int]:
+    val = os.getenv(name)
+    return int(val) if val and val.isdigit() else None
 
+API_ID = _int_env("API_ID")
+API_HASH = os.getenv("API_HASH")
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+LOG_CHANNEL = _int_env("LOG_CHANNEL")
+MONGO_URL = os.getenv("MONGO_URL")
 
-LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL")) if os.environ.get("LOG_CHANNEL") else None
-FFMPEG_BIN = os.environ.get("FFMPEG_BIN", "ffmpeg")
-TMP_DIR = os.environ.get("TMP_DIR", "/tmp")
+# Basic validation - will raise helpful errors early if missing
+def validate():
+    missing = []
+    if API_ID is None:
+        missing.append("API_ID")
+    if not API_HASH:
+        missing.append("API_HASH")
+    if not BOT_TOKEN:
+        missing.append("BOT_TOKEN")
+    if missing:
+        raise RuntimeError(
+            f"Missing required environment variables: {', '.join(missing)}. "
+            "Set them before starting the bot."
+        )
 
-
-if not BOT_TOKEN or not API_ID or not API_HASH:
-raise RuntimeError("BOT_TOKEN, API_ID and API_HASH environment variables are required")
+if __name__ == "__main__":
+    try:
+        validate()
+        print("configs loaded OK")
+    except Exception as e:
+        print("Configuration error:", e)
+        raise
